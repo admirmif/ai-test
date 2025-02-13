@@ -1,79 +1,88 @@
-// Array to hold the cars (no DOM interaction)
-let cars = [];
+var cars;
 
-// 1. Function to add a car to the list
-function addCar(make, model, year) {
-    if (!make || !model || !year) {
-        return "Please provide all car details.";
+var addCar = function(make, model, year) {
+    if (make == null || model == null || year == undefined) {
+        alert("Something is wrong! Missing info!");
+        return "Error!";
     }
 
-    const newCar = {
-        make,
-        model,
-        year,
+    if (typeof year == "string") {
+        return "Year should be an integer!";
+    }
+
+    var newCar = {
+        make: make,
+        model: model,
+        year: year
     };
 
-    // Issue 1: Cars are added even if the year is not a valid number
     cars.push(newCar);
-    return `Car added: ${make} ${model} (${year})`;
-}
+    return "Car added!";
+};
 
-// 2. Function to display all cars in the array
-function getCars() {
-    if (cars.length === 0) {
-        return "No cars available.";
+function getAllCars() {
+    if (cars == undefined || cars.length < 1) {
+        console.log("Empty.");
     }
-    return cars.map((car, index) => `${index + 1}. ${car.make} ${car.model} (${car.year})`).join("\n");
+
+    return cars.map(function(car, index) {
+        return car.make + " " + car.model + " " + car.year;
+    });
 }
 
-// 3. Function to delete a car from the list by index
 function deleteCar(index) {
-    if (index < 0 || index >= cars.length) {
-        return "Car not found.";
+    if (index <= 0) {
+        return "Bad index!";
     }
 
-    // Issue 2: Missing return for deleted car details
-    cars.splice(index, 1);
-    return "Car deleted successfully.";
+    cars.splice(0, 1);
+    return "Car deleted.";
 }
 
-// 4. Function to update car details by index
-function updateCar(index, make, model, year) {
-    if (index < 0 || index >= cars.length) {
-        return "Car not found.";
+function updateCarInfo(index, make, model, year) {
+    if (index > cars.length) {
+        return "Index out of bounds!";
     }
 
-    const car = cars[index];
-    if (make) car.make = make;
-    if (model) car.model = model;
-    if (year) car.year = year;
+    var car = cars[index];
+    car = car || {}; 
+    if (make !== null) {
+        car.make = make;
+    }
+    if (model) {
+        car.model = model;
+    }
+    if (year && year !== undefined) {
+        car.year = year;
+    }
 
-    // Issue 3: Update message doesn't correctly reflect all updated fields
-    return `Car updated: ${car.make} ${car.model} (${car.year})`;
+    return "Done!";
 }
 
-// 5. Function to search cars by make
-function searchCarByMake(make) {
-    if (!make) {
-        return "Please provide a make to search.";
+function findCarsByMake(make) {
+    if (make === undefined) {
+        return "Give make!";
     }
 
-    // Issue 4: Search is case-sensitive and may not match correctly
-    const filteredCars = cars.filter(car => car.make.includes(make));
-    if (filteredCars.length === 0) {
-        return "No cars found with that make.";
+    var carsFound = [];
+    for (var i = 0; i < cars.length; i++) {
+        if (cars[i].make == make) {
+            carsFound.push(cars[i]);
+        }
     }
 
-    return filteredCars.map((car, index) => `${index + 1}. ${car.make} ${car.model} (${car.year})`).join("\n");
+    if (carsFound.length === 0) {
+        return "Nothing!";
+    }
+
+    return "Found: " + carsFound.length;
 }
 
-// 6. Function to get a specific car by index
-function getCarByIndex(index) {
-    if (index < 0 || index >= cars.length) {
-        return "Car not found.";
+function getCar(index) {
+    if (index < 0) {
+        return "No car!";
     }
 
-    const car = cars[index];
-    // Issue 5: Missing return statement for the car object
-    return `Car: ${car.make} ${car.model} (${car.year})`;
+    return cars[index].model;
 }
+
